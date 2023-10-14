@@ -1,17 +1,74 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+package src;
+
+import edu.princeton.cs.stdlib.StdOut;
+import edu.princeton.cs.stdlib.StdIn;
+import src.services.SistemaNegocioImpl;
+
+import java.util.Objects;
+
 public class Main {
     public static void main(String[] args) {
-        // Press Alt+Intro with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        menuPrincipal();
+    }
 
-        // Press Mayús+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+    private static void menuPrincipal() {
+        SistemaNegocioImpl SistemaNegocioImpl = new SistemaNegocioImpl();
 
-            // Press Mayús+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+        SistemaNegocioImpl.cargarInformacion();
+
+
+        StdOut.println("[*] BIENVENIDO AL SISTEMA DE ADMINISTRACION DEL RESTAURANTE[*]");
+        String opcion = null;
+        while (!Objects.equals(opcion,"5")){
+            StdOut.println("""
+                    ---------------------------------------------------------------------------------------------------
+                    
+                    [1] Opciones de inventario.
+                    [2] Opciones de Trabajadores.
+                    [3] Opciones de clientes.
+                    [4] Opciones de Mesas.
+                    [5] Guardar cambios y cerrar el programa.
+                    """);
+            StdOut.print("Inserte su opcion aqui: ");
+            opcion = StdIn.readLine();
+            StdOut.println("---------------------------------------------------------------------------------------------------");
+
+            switch (opcion){
+                case "1" -> menuInventario(SistemaNegocioImpl);
+                case "2" -> StdOut.println("Se esta trabajando en ello");
+                case "3" -> StdOut.println("Se esta trabajando en ello");
+                case "4" -> StdOut.println("Se esta trabajando en ello");
+                case "5" -> StdOut.println("Hasta Pronto");
+                default -> StdOut.println("Opcion no valida, intente nuevamente");
+
+            }
+        }
+    }
+
+    private static void menuInventario(SistemaNegocioImpl sistemaNegocioImpl){
+        StdOut.println("[*] MENU INVENTARIO [*]");
+        String opcion = null;
+        while (!Objects.equals(opcion,"5")){
+            StdOut.println("""
+                    ---------------------------------------------------------------------------------------------------
+                    
+                    [1] Ver inventario.
+                    [2] Agregar un producto.
+                    [3] Eliminar un producto.
+                    [4] Regresar al menu principal.
+                    """);
+            StdOut.print("Inserte su opcion aqui: ");
+            opcion = StdIn.readLine();
+            StdOut.println("---------------------------------------------------------------------------------------------------");
+
+            switch (opcion){
+                case "1" -> sistemaNegocioImpl.opcionesInventario("1");
+                case "2" -> sistemaNegocioImpl.opcionesInventario("2");
+                case "3" -> StdOut.println("Se esta trabajando en ello");
+                case "4" -> StdOut.println("Regresando al menu principal...");
+                default -> StdOut.println("Opcion no valida, intente nuevamente");
+
+            }
         }
     }
 }

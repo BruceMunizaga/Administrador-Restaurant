@@ -1,0 +1,122 @@
+@startuml
+skin rose
+left to right direction
+package cl.ucn.disc.pa.restaurante{
+    package Util{
+        class Instalador{
+        - sistemaDelNegocio: SistemaNegocio
+        + Instalador()
+        + instalarSistema(): SistemaNegocio
+        }
+    }
+
+    package Services{
+        class SistemaNegocioImpl{
+
+        }
+
+        interface SistemaNegocio{
+
+        }
+        SistemaNegocioImpl ..|> SistemaNegocio
+    }
+    Instalador --> SistemaNegocio
+
+    package Model{
+        abstract Persona <<abstract>>{
+                -nombre: String
+                -edad: int
+                +Persona(nombre: String, edad: int)
+                +getNombre(): String
+                +getEdad(): int
+            }
+
+            class Trabajador{
+                -tipoDeContrato: String
+                -fechaInicioContrato: String
+                -fechaTerminoContrato: String
+                +Trabajador(nombre: String, edad: int, tipoDeContrato: String, fechaInicioContrato: String, fechaTerminoContrato: String)
+                +getTipoDeContrato(): String
+                +setTipoDeContrato(contratoNuevo: String): void
+                +getFechaInicioContrato(): String
+                +setFechaInicioContrato(nuevaFechaInicio: String): void
+                +getFechaTerminoContrato(): String
+                +setFechaTerminoContrato(nuevaFechaTermino: String): void
+            }
+            Trabajador --|> Persona
+
+            class ContenedorTrabajadores{
+                -trabajadores: Trabajador[]
+                -cantMaxima: int
+                -cantActual: int
+                +ContenedorTrabajadores(cantMaxima: int)
+                +agregarTrabajador(nuevoTrabajador: Trabajador): boolean
+                +obtenerTrabajador(nombreTrabajador: String): Trabajador
+                +eliminarTrabajador(nombreTrabajador: String): boolean
+            }
+            ContenedorTrabajadores --o Trabajador
+            SistemaNegocioImpl -> ContenedorTrabajadores
+
+            class Cliente{
+            }
+            Cliente --|> Persona
+
+            class ContenedorClientes{
+                -clientes: Cliente[]
+                -cantMaxima: int
+                -cantActual: int
+                +ContenedorClientes(cantMaxima: int)
+                +agregarCliente(nuevoCliente: Cliente): boolean
+                +obtenerCliente(nombreCliente: String): Cliente
+            }
+            ContenedorClientes --o Cliente
+            SistemaNegocioImpl -> ContenedorClientes
+
+            class Mesa{
+                -validadorLibreOcupado: boolean
+                -numeroDeMesa: int
+                +Mesa(validadorLibreOcupado: boolean, numeroDeMesa: int)
+                +getValidadorLibreOcupado(): boolean
+                +setValidadorLibreOcupado(validador: boolean): void
+                +getNumeroDeMesa(): int
+            }
+
+            class ContenedorMesas{
+                -mesas: Mesa[]
+                -cantMaxima: int
+                -cantActual: int
+                +ContenedorMesas(cantMaxima: int)
+                + agregarMesa(nuevaMesa: Mesa): boolean
+                + obtenerMesa(numeroMesa: int): Mesa
+            }
+            ContenedorMesas --o Mesa
+            SistemaNegocioImpl -> ContenedorMesas
+
+            class Producto{
+                -nombreProducto: String
+                -precioProducto: int
+                -categoria: String
+                -stock: int
+                +Producto(nombreProducot: String, precioProducto: int, categoria: String, stock: int)
+                +getNombreProducto(): String
+                +getPrecioProducto(): int
+                +getCategoria(): String
+                +getStock(): int
+                +setStock(cantidad: int): boolean
+            }
+            class ContenedorProductos{
+                -inventario: Producto[]
+                -cantMaxima: int
+                -cantActual: int
+                +ContenedorProductos(cantMaxima: int)
+                +agregarProducto(nuevoProducto: Producto): boolean
+                +obtenerProducto(nombreProducto: String): Producto
+                +eliminarProducto(nombreProducto: String): boolean
+            }
+            ContenedorProductos --o Producto
+            SistemaNegocioImpl -> ContenedorProductos
+        }
+    }
+}
+
+@enduml
