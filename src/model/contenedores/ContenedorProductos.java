@@ -48,14 +48,12 @@ public class ContenedorProductos {
             if (this.cantActual == 0){
                 this.inventario[0] = nuevoProducto;
                 this.cantActual++;
-                System.out.println("Producto agregado.");
                 return true;
             }else{
                 for (int i = 0; i < this.cantMaxima; i++) {
                     if (this.inventario[i] == null){
                         this.inventario[i] = nuevoProducto;
                         this.cantActual++;
-                        System.out.println("Producto agregado.");
                         return true;
                     }
                 }
@@ -74,9 +72,11 @@ public class ContenedorProductos {
         if (this.cantActual == 0){
             System.out.println("No hay Productos registrados.");
         }else{
-            for (Producto producto: this.inventario) {
-                if(producto.getNombreProducto().equalsIgnoreCase(nombreProducto)){
-                    return producto; //FIXME: Agregar el desplegar toda su informacion en la clase Producto
+
+            //FIXME: arreglar esta busqueda porque no encuentra los productos que tienen espacio
+            for (int i = 0; i < this.cantActual; i++) {
+                if(this.inventario[i].getNombreProducto().equalsIgnoreCase(nombreProducto)){
+                    return inventario[i];
                 }
             }
             System.out.println("Producto no encontrado.");
@@ -85,19 +85,55 @@ public class ContenedorProductos {
     }
 
     /**
-     * Metodo que desplegara todo el inventario
+     * Funcion que entegara la posicion de ese producto
      *
+     * @param producto a buscar
+     * @return la posicion del producto encontrado
      */
-    public void desplegarProductos(){
-
-        //FIXME: Completar el despliegue de forma correcta con todos sus datos
+    public int posicionProducto(Producto producto){
         if (this.cantActual == 0){
             System.out.println("No hay Productos registrados.");
         }else{
             for (int i = 0; i < this.cantActual; i++) {
-                String nombreProducto = inventario[i].getNombreProducto();
-                StdOut.println(nombreProducto);
+                if(this.inventario[i] == producto){
+                    return i;
+                }
             }
+            System.out.println("Producto no encontrado.");
+        }
+        return -1;
+    }
+
+    /**
+     * Metodo que desplegara el inventario
+     *
+     */
+    public void desplegarProductos(){
+
+        //Si no hay productos, se despliega esto
+        if (this.cantActual == 0){
+            System.out.println("No hay Productos registrados.");
+        }else{
+
+            //si hay productos agregados, se despliega esto
+            StdOut.println("[*][*][*][*][*][*][*] INVENTARIO [*][*][*][*][*][*][*]");
+
+            //se recorre el arreglo y se guardan sus datos en variables temporales
+            for (int i = 0; i < this.cantActual; i++) {
+                String nombreProducto = inventario[i].getNombreProducto();
+                int precioProducto = inventario[i].getPrecioProducto();
+                String categoriaProducto = inventario[i].getCategoria();
+                int stockProducto = inventario[i].getStock();
+
+                //Se desplegia por pantalla toda la informacion de del producto
+                StdOut.println("...........................................");
+                StdOut.println("Nombre del producto: "+nombreProducto);
+                StdOut.println("Precio del producto: "+precioProducto);
+                StdOut.println("Categoria del producto: "+categoriaProducto);
+                StdOut.println("Stock del producto: "+stockProducto);
+
+            }
+            StdOut.println("[*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*]");
         }
     }
 

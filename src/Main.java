@@ -30,14 +30,14 @@ public class Main {
                     [5] Guardar cambios y cerrar el programa.
                     """);
             StdOut.print("Inserte su opcion aqui: ");
-            opcion = StdIn.readLine();
+            opcion = StdIn.readString();
             StdOut.println("---------------------------------------------------------------------------------------------------");
 
             switch (opcion){
                 case "1" -> menuInventario(SistemaNegocioImpl);
-                case "2" -> StdOut.println("Se esta trabajando en ello");
-                case "3" -> StdOut.println("Se esta trabajando en ello");
-                case "4" -> StdOut.println("Se esta trabajando en ello");
+                case "2" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
+                case "3" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
+                case "4" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
                 case "5" -> StdOut.println("Hasta Pronto");
                 default -> StdOut.println("Opcion no valida, intente nuevamente");
 
@@ -54,18 +54,20 @@ public class Main {
                     
                     [1] Ver inventario.
                     [2] Agregar un producto.
-                    [3] Eliminar un producto.
-                    [4] Regresar al menu principal.
+                    [3] Actualizar stock.
+                    [4] Eliminar un producto.
+                    [5] Regresar al menu principal.
                     """);
             StdOut.print("Inserte su opcion aqui: ");
-            opcion = StdIn.readLine();
+            opcion = StdIn.readString();
             StdOut.println("---------------------------------------------------------------------------------------------------");
 
             switch (opcion){
                 case "1" -> sistemaNegocioImpl.opcionesInventario("1");
                 case "2" -> sistemaNegocioImpl.opcionesInventario("2");
-                case "3" -> StdOut.println("Se esta trabajando en ello");
-                case "4" -> StdOut.println("Regresando al menu principal...");
+                case "3" -> sistemaNegocioImpl.opcionesInventario("3"); //FIXME: aun falta, esta incompleto
+                case "4" -> StdOut.println("Se esta trabajando en ello"); //TODO: hay que programarlo
+                case "5" -> StdOut.println("Regresando al menu principal...");
                 default -> StdOut.println("Opcion no valida, intente nuevamente");
 
             }

@@ -1,5 +1,7 @@
 package src.model;
 
+import edu.princeton.cs.stdlib.StdOut;
+
 public class Producto {
 
     private String nombreProducto;
@@ -38,6 +40,26 @@ public class Producto {
     }
 
     public void setStock(int stock) {
-        this.stock = stock;
+        this.stock += stock;
+    }
+
+    /**
+     * Metodo que desplegara el un producto
+     *
+     */
+    public void desplegarUnProducto(Producto productoDeplegar){
+
+        //Se guardan sus datos en variables temporales
+        String nombreProducto = productoDeplegar.getNombreProducto();
+        int precioProducto = productoDeplegar.getPrecioProducto();
+        String categoriaProducto = productoDeplegar.getCategoria();
+        int stockProducto = productoDeplegar.getStock();
+
+        //Se desplegia por pantalla toda la informacion del producto
+        StdOut.println("...........................................");
+        StdOut.println("Nombre del producto: "+nombreProducto);
+        StdOut.println("Precio del producto: "+precioProducto);
+        StdOut.println("Categoria del producto: "+categoriaProducto);
+        StdOut.println("Stock del producto: "+stockProducto);
     }
 }
