@@ -4,7 +4,7 @@ import src.model.Mesa;
 
 public class ContenedorMesas {
 
-    private Mesa[] mesas;
+    private final Mesa[] mesas;
 
     private int cantActual;
     private final int cantMaxima;
@@ -47,14 +47,12 @@ public class ContenedorMesas {
             if (this.cantActual == 0){
                 this.mesas[0] = nuevaMesa;
                 this.cantActual++;
-                System.out.println("Mesa agregada.");
                 return true;
             }else{
                 for (int i = 0; i < this.cantMaxima; i++) {
                     if (this.mesas[i] == null){
                         this.mesas[i] = nuevaMesa;
                         this.cantActual++;
-                        System.out.println("Mesa agregada.");
                         return true;
                     }
                 }

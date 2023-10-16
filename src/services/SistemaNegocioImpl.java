@@ -2,29 +2,37 @@ package src.services;
 
 import edu.princeton.cs.stdlib.StdIn;
 import edu.princeton.cs.stdlib.StdOut;
+import src.model.Mesa;
 import src.model.Producto;
 import src.model.contenedores.ContenedorClientes;
 import src.model.contenedores.ContenedorMesas;
 import src.model.contenedores.ContenedorProductos;
 import src.model.contenedores.ContenedorTrabajadores;
+import src.model.herenciaPersona.Cliente;
+import src.model.herenciaPersona.Trabajador;
 
 import java.util.Objects;
 
 public class SistemaNegocioImpl implements SistemaNegocio{
 
     //contenedores que se utilizaran en este taller
-    ContenedorTrabajadores trabajadores = new ContenedorTrabajadores(999);
-    ContenedorClientes clientes = new ContenedorClientes(999);
+    ContenedorTrabajadores trabajadores = new ContenedorTrabajadores(99);
+    ContenedorClientes clientes = new ContenedorClientes(99);
     ContenedorMesas mesas = new ContenedorMesas(18);
-    ContenedorProductos inventario = new ContenedorProductos(999);
+    ContenedorProductos inventario = new ContenedorProductos(99);
 
     //variables que se utilizaran para este taller
     Producto producto = null;
+    Trabajador trabajador = null;
+    Mesa mesa = null;
+    Cliente cliente = null;
 
     @Override
     public void cargarInformacion() {
 
         //si no hay informacion guardada, se generan automaticamente
+
+        //inventario
         producto = new Producto("Pan",200,"Comestible",30);
         this.inventario.agregarProducto(producto);
         producto = new Producto("Cebolla",300,"Comestible",30);
@@ -33,150 +41,368 @@ public class SistemaNegocioImpl implements SistemaNegocio{
         this.inventario.agregarProducto(producto);
         producto = new Producto("Tacos al pastor",700,"Comestible",30);
         this.inventario.agregarProducto(producto);
+
+        //trabajadores
+        trabajador = new Trabajador("Jorge", 23, "Indefinido", "25/05/2023","");
+        this.trabajadores.agregarTrabajador(trabajador);
+        trabajador = new Trabajador("Matias", 19, "Fijo", "05/09/2023","05/12/2023");
+        this.trabajadores.agregarTrabajador(trabajador);
+        trabajador = new Trabajador("Victoria", 25, "Indefinido", "23/10/2023","");
+        this.trabajadores.agregarTrabajador(trabajador);
+        trabajador = new Trabajador("Sofia", 21, "Fijo", "18/10/2023","18/01/2024");
+        this.trabajadores.agregarTrabajador(trabajador);
+
+        //mesas
+        for (int i = 1; i <=18 ; i++) {
+            this.mesa = new Mesa(true,i);
+            this.mesas.agregarMesa(this.mesa);
+        }
+
     }
 
     @Override
-    public void opcionesInventario(String opcion) {
+    public void actualizarStock() {
 
-        //Si en el menu inventario escogiste la opcion uno, esto se ejecutara
-        if (opcion.equalsIgnoreCase("1")){
-            int cantActual = inventario.getCantActual();
+        //se despliegan los productos en pantalla
+        this.inventario.desplegarProductos();
 
-            //Si no hay productos agregados, se despliega esto
-            if (cantActual == 0){
-                StdOut.println("No hay productos registrados");
-            }else{
+        //Se pide el nombre del producto
+        StdOut.print("Ingrese el nombre del producto que desea actualizar su stock: ");
+        String nombreProducto = StdIn.readLine();
 
-                //Si hay productos agregados, se despliegan
-                inventario.desplegarProductos();
-            }
-        }
+        //Se busca el producto en el arreglo
+        this.producto = this.inventario.obtenerProducto(nombreProducto);
 
-        //Si escogio la segunda opcion, se ejecuta esto
-        if (opcion.equalsIgnoreCase("2")){
+        //Si se encontró ese producto se ejecuta esto
+        if(this.producto != null){
 
-            //Se comienzan a pedir todos los datos del nuevo producto
-            StdOut.print("Ingrese el nombre del producto a agregar: ");
-            String nombreProducto = StdIn.readString();
+            //variable a utilizar
+            int nuevoStock;
+            String opcionStock;
 
-            int precioProducto;
-            do {
-                StdOut.print("Ingrese el precio del producto: ");
-                precioProducto = StdIn.readInt();
-
-                if (precioProducto < 0){
-                    StdOut.println("El precio no puede ser inferior a cero");
-                }
-            }while (precioProducto < 0);
-
-            int stockProducto;
-            do {
-                StdOut.print("Ingrese el stock del producto: ");
-                stockProducto = StdIn.readInt();
-
-                if (stockProducto <= 0){
-                    StdOut.println("El stock no puede ser  o igual a cero");
-                }
-            }while (stockProducto <= 0);
-
-            String opcionCategoria;
-            String categoria = null;
+            //se pregunta sobre la accion
             do {
                 StdOut.println("""
+                        ¿Desea agregar o disminuir su Stock?
+                        [1] Agregar Stock.
+                        [2] Disminuir Stock.
+                    """);
+                StdOut.print("Inserte su opcion aqui: ");
+                opcionStock = StdIn.readLine();
+
+                //si quiere agregar al stock
+                if (opcionStock.equalsIgnoreCase("1")) {
+
+                    //validacion de dato
+                    do {
+                        StdOut.print("Ingrese el stock a agregar: ");
+                        nuevoStock = StdIn.readInt();
+
+                        if (nuevoStock <= 0) {
+                            StdOut.println("El stock a agregar debe ser mayor a cero");
+                        }
+                    }while (nuevoStock <= 0);
+
+                    this.producto.setStock(nuevoStock);
+
+                }
+
+                //si quiere quitar del stock
+                if (opcionStock.equalsIgnoreCase("2")){
+
+                    //validacion de dato
+                    do {
+                        StdOut.print("Ingrese el stock a quitar: ");
+                        nuevoStock = StdIn.readInt();
+
+                        if (nuevoStock <= 0) {
+                            StdOut.println("El stock a quitar debe ser mayor a cero");
+                        }
+                    }while (nuevoStock <= 0);
+
+                    nuevoStock = nuevoStock * -1;
+                    this.producto.setStock(nuevoStock);
+                }
+                if (!opcionStock.equalsIgnoreCase("1") && !opcionStock.equalsIgnoreCase("2")){
+                    StdOut.println("Solo se permiten valores 1 y 2");
+                }
+            }while (!opcionStock.equalsIgnoreCase("1") && !opcionStock.equalsIgnoreCase("2"));
+
+            this.inventario.eliminarProductosStockCero();
+        }
+    }
+
+    @Override
+    public void verInventario(){
+
+        //importo la cantidad actual del inventario
+        int cantActual = inventario.getCantActual();
+
+        //Si no hay productos agregados, se despliega esto
+        if (cantActual == 0){
+            StdOut.println("No hay productos registrados");
+        }else{
+
+            //Si hay productos agregados, se despliegan
+            inventario.desplegarProductos();
+        }
+    }
+
+    @Override
+    public void agregarProducto(){
+
+        //Se comienzan a pedir todos los datos del nuevo producto
+        StdOut.print("Ingrese el nombre del producto a agregar: ");
+        String nombreProducto = StdIn.readString();
+
+        int precioProducto;
+        do {
+            StdOut.print("Ingrese el precio del producto: ");
+            precioProducto = StdIn.readInt();
+
+            if (precioProducto < 0){
+                StdOut.println("El precio no puede ser inferior a cero");
+            }
+        }while (precioProducto < 0);
+
+        int stockProducto;
+        do {
+            StdOut.print("Ingrese el stock del producto: ");
+            stockProducto = StdIn.readInt();
+
+            if (stockProducto <= 0){
+                StdOut.println("El stock no puede ser  o igual a cero");
+            }
+        }while (stockProducto <= 0);
+
+        String opcionCategoria;
+        String categoria = null;
+        do {
+            StdOut.println("""
                         Ingrese la categoria del producto al cual pertenece:
                                             
                         [1] Comestible
                         [2] Bebestible
                         [3] Otros (no especificado)
                         """);
-                StdOut.print("Inserte su opcion aqui: ");
-                opcionCategoria = StdIn.readString();
+            StdOut.print("Inserte su opcion aqui: ");
+            opcionCategoria = StdIn.readString();
 
-                if (opcionCategoria.equalsIgnoreCase("1")) {
-                    categoria = "Comestible";
-                }
-                if (opcionCategoria.equalsIgnoreCase("2")) {
-                    categoria = "Bebestible";
-                }
-                if (opcionCategoria.equalsIgnoreCase("3")) {
-                    categoria = "Otros (no especificado)";
-                }
-                if(!opcionCategoria.equalsIgnoreCase("1") && !opcionCategoria.equalsIgnoreCase("2") && !opcionCategoria.equalsIgnoreCase("3")){
-                    StdOut.println("Solo se permiten valores 1, 2 y 3");
-                }
-            }while (!Objects.equals(opcionCategoria,"1") && !Objects.equals(opcionCategoria,"2") && !Objects.equals(opcionCategoria,"3"));
-
-            this.producto = new Producto(nombreProducto,precioProducto,categoria,stockProducto);
-             if(this.inventario.agregarProducto(producto)){
-                 StdOut.println("Producto agregado");
-             }
-        }
-
-        //Si ecogio la tercera opcion, se ejecuta esto
-        if (opcion.equalsIgnoreCase("3")){
-            this.inventario.desplegarProductos();
-
-            //Se pide el nombre del producto
-            StdOut.print("Ingrese el nombre del producto que desea actualizar su stock: ");
-            String nombreProducto = StdIn.readString();
-
-            //Se busca el producto en el arreglo
-            this.producto = this.inventario.obtenerProducto(nombreProducto);
-
-            //Si se encontró ese producto se ejecuta esto
-            if(this.producto != null){
-                //Se pide la poiscion de ese producto
-                int posicionProducto = this.inventario.posicionProducto(this.producto);
-                String opcionStock = null;
-                do {
-                    StdOut.println("""
-                        ¿Desea agregar o disminuir su Stock?
-                        [1] Agregar Stock.
-                        [2] Disminuir Stock.
-                    """);
-                    StdOut.print("Inserte su opcion aqui: ");
-                    opcionStock = StdIn.readString();
-
-                    if (opcionStock.equalsIgnoreCase("1")) {
-                        //variable a utilizar
-                        int nuevoStock;
-
-                        //validacion de dato
-                        do {
-                            StdOut.print("Ingrese el stock a agregar");
-                            nuevoStock = StdIn.readInt();
-
-                            if (nuevoStock <= 0) {
-                                StdOut.println("El stock a agregar debe ser mayor a cero");
-                            }
-                        }while (nuevoStock <= 0);
-
-                        this.producto.setStock(nuevoStock);
-
-                    }
-                    if (opcionStock.equalsIgnoreCase("2")) {
-                        //categoria = "Bebestible";
-                    }
-                    if (!opcionStock.equalsIgnoreCase("1") && !opcionStock.equalsIgnoreCase("2")){
-                        StdOut.println("Solo se permiten valores 1 y 2");
-                    }
-                }while (!Objects.equals(opcionStock,"1") && !Objects.equals(opcionStock,"2"));
+            if (opcionCategoria.equalsIgnoreCase("1")) {
+                categoria = "Comestible";
             }
+            if (opcionCategoria.equalsIgnoreCase("2")) {
+                categoria = "Bebestible";
+            }
+            if (opcionCategoria.equalsIgnoreCase("3")) {
+                categoria = "Otros (no especificado)";
+            }
+            if(!opcionCategoria.equalsIgnoreCase("1") && !opcionCategoria.equalsIgnoreCase("2") && !opcionCategoria.equalsIgnoreCase("3")){
+                StdOut.println("Solo se permiten valores 1, 2 y 3");
+            }
+        }while (!Objects.equals(opcionCategoria,"1") && !Objects.equals(opcionCategoria,"2") && !Objects.equals(opcionCategoria,"3"));
+
+        //se guardan los datos
+        this.producto = new Producto(nombreProducto,precioProducto,categoria,stockProducto);
+        if(this.inventario.agregarProducto(producto)){
+            StdOut.println("Producto agregado");
+        }
+    }
+
+    @Override
+    public void eliminarUnProducto(){
+        //se solicita el nombre del producto a buscar
+        StdOut.print("Ingrese el nombre del producto que desea eliminar del inventario: ");
+        String nombreProductoStock = StdIn.readLine();
+
+        // se busca el producto en funcion de su nombre
+        this.producto = this.inventario.obtenerProducto(nombreProductoStock);
+
+        //si se encontro el producto, se llama al metodo que lo eliminara
+        if (this.producto != null){
+            this.inventario.eliminarProductoNombre(this.producto);
         }
     }
 
     @Override
     public void verTrabajadores() {
+        //se despliega por pantalla a los trabajadores registrados
+        this.trabajadores.desplegarTrabajadores();
 
     }
 
     @Override
-    public void verClientes() {
+    public void renovarContrato(){
+
+        //se despliegan los trabajadores por pantalla
+        this.trabajadores.desplegarTrabajadores();
+
+        //se solicita el nombre del trabajador
+        StdOut.print("Ingrese el nombre del trabajador al cual desee renovarle el contrato: ");
+        String nombreTrabajador = StdIn.readLine();
+        this.trabajador = this.trabajadores.obtenerTrabajador(nombreTrabajador);
+
+        //si encuentra al trabajador, se ejecuta esto
+        if (trabajador != null){
+
+            //si el trabajador no mantiene contrato indefinido
+            if (!(this.trabajador.getTipoDeContrato().equalsIgnoreCase("Indefinido"))){
+                StdOut.print("Indique la fecha de renovacion del contrato (dd//mm/aaaa): ");
+                String fechaContratacion = StdIn.readString();
+                StdOut.print("Indique la fecha de finalizacion del contrato (dd//mm/aaaa): ");
+                String fechaFinContratacion = StdIn.readString();
+
+                //se guardan los datos
+                this.trabajador.setFechaInicioContratacion(fechaContratacion);
+                this.trabajador.setFechaTerminoContratacion(fechaFinContratacion);
+            } else{
+
+                //si el trabajador ya mantiene un contrato indefinido, no se puede hacer una renovacion
+                StdOut.println("No se le puede renovar el contrato a un trabajador que posee contrato Indefinido");
+            }
+        }
+    }
+
+    @Override
+    public void finalizarContrato(){
+
+        this.trabajadores.desplegarTrabajadores();
+
+        //se solicita el nombre del trabajador
+        StdOut.print("Ingrese el nombre del trabajador al cual desee finalizarle el contrato: ");
+        String nombreTrabajador = StdIn.readLine();
+
+        //se busca al trabajador en el arreglo
+        this.trabajador = this.trabajadores.obtenerTrabajador(nombreTrabajador);
+
+        if (this.trabajador != null){
+            this.trabajadores.finalizarContratoTrabajador(this.trabajador);
+        }
+
 
     }
 
     @Override
-    public void verMesas() {
+    public void otorgarIndefinido(){
 
+        this.trabajadores.desplegarTrabajadores();
+
+        //se solicita el nombre del trabajador
+        StdOut.print("Ingrese el nombre del trabajador al cual desee otorgarle el contrato Indefinido: ");
+        String nombreTrabajador = StdIn.readLine();
+
+        //se busca al trabajador en el arreglo
+        this.trabajador = this.trabajadores.obtenerTrabajador(nombreTrabajador);
+
+        //si encontro al trabajador
+        if (this.trabajador != null){
+
+            //si el trabajdor ya tiene el contrato indefinido
+            if (this.trabajador.getTipoDeContrato().equalsIgnoreCase("Indefinido")){
+                StdOut.println("No se puede otorgar un contrato Indefinido a un trabajador que ya lo posee");
+            }else{
+                //si el trabajador no tiene contrato indefinido, se le otorga
+                StdOut.print("Indique la fecha en la cual se le esta otorgando el contrato Indefinido (dd/mm/aaaa): ");
+                String fechaIndefinido = StdIn.readString();
+                this.trabajador.setFechaInicioContratacion(fechaIndefinido);
+                this.trabajador.setFechaTerminoContratacion("");
+                this.trabajador.setTipoDeContrato("Indefinido");
+            }
+        }
+    }
+
+    @Override
+    public void registrarCliente() {
+
+        //se solicitan los datos del nuevo cliente
+        StdOut.print("Registrar el nombre del nuevo cliente: ");
+        String nombreClienteNuevo = StdIn.readString();
+
+        StdOut.print("Registrar el edad del nuevo cliente: ");
+        int edadClienteNuevo = StdIn.readInt();
+
+        //se consulta la mesa que ocupara
+        while(true){
+            StdOut.print("¿Que mesa ocupara?(incerte numero de mesa): ");
+            int mesaOcupar = StdIn.readInt();
+
+            this.mesa = this.mesas.obtenerMesa(mesaOcupar);
+
+            //se valida si es que esa mesa esta ocupada o no
+            if (!(this.mesa.isLibreOcupada())){
+                StdOut.println("Mesa ocupada, esoga otra");
+            }else{
+
+                //si la mesa no esta ocupada, el cliente se situara en ella
+                this.cliente = new Cliente(nombreClienteNuevo,edadClienteNuevo);
+                this.clientes.agregarCliente(this.cliente);
+                this.mesa.setLibreOcupada(false);
+                this.mesa.setCliente(cliente);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void desplegarMesas() {
+
+        //se despliegan las mesas en pantalla visiblemente agradable con el status y su numero
+        StdOut.print();
+        StdOut.print();
+        StdOut.println("+---------+         +---------+         +---------+         +---------+" +
+                "         +---------+         +---------+");
+        StdOut.println("|    1    |         |    2    |         |    3    |         |    4    |" +
+                "         |    5    |         |    6    |");
+        StdOut.println("|         |         |         |         |         |         |         |" +
+                "         |         |         |         |");
+        StdOut.println("| "+this.mesas.obtenerMesa(1).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(2).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(3).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(4).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(5).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(6).isLibreOcupadaString()+" |");
+        StdOut.println("|         |         |         |         |         |         |         |" +
+                "         |         |         |         |");
+        StdOut.println("+---------+         +---------+         +---------+         +---------+" +
+                "         +---------+         +---------+");
+        StdOut.println();
+        StdOut.println();
+        StdOut.println("+---------+         +---------+         +---------+         +---------+" +
+                "         +---------+         +---------+");
+        StdOut.println("|    7    |         |    8    |         |    9    |         |    10   |" +
+                "         |    11   |         |    12   |");
+        StdOut.println("|         |         |         |         |         |         |         |" +
+                "         |         |         |         |");
+        StdOut.println("| "+this.mesas.obtenerMesa(7).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(8).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(9).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(10).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(11).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(12).isLibreOcupadaString()+" |");
+        StdOut.println("|         |         |         |         |         |         |         |" +
+                "         |         |         |         |");
+        StdOut.println("+---------+         +---------+         +---------+         +---------+" +
+                "         +---------+         +---------+");
+        StdOut.println();
+        StdOut.println();
+        StdOut.println("+---------+         +---------+         +---------+         +---------+" +
+                "         +---------+         +---------+");
+        StdOut.println("|    13   |         |    14   |         |    15   |         |    16   |" +
+                "         |    17   |         |    18   |");
+        StdOut.println("|         |         |         |         |         |         |         |" +
+                "         |         |         |         |");
+        StdOut.println("| "+this.mesas.obtenerMesa(13).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(14).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(15).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(16).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(17).isLibreOcupadaString()+" |         | "
+                +this.mesas.obtenerMesa(18).isLibreOcupadaString()+" |");
+        StdOut.println("|         |         |         |         |         |         |         |" +
+                "         |         |         |         |");
+        StdOut.println("+---------+         +---------+         +---------+         +---------+" +
+                "         +---------+         +---------+");
+
+        StdOut.println();
+        StdOut.println();
     }
 }

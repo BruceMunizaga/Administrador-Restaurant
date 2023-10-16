@@ -5,8 +5,7 @@ import src.model.Producto;
 
 public class ContenedorProductos {
 
-    private Producto[] inventario;
-
+    private final Producto[] inventario;
     private int cantActual;
     private final int cantMaxima;
 
@@ -29,10 +28,6 @@ public class ContenedorProductos {
 
     public int getCantActual() {
         return this.cantActual;
-    }
-
-    public int getCantMaxima() {
-        return this.cantMaxima;
     }
 
     /**
@@ -72,36 +67,14 @@ public class ContenedorProductos {
         if (this.cantActual == 0){
             System.out.println("No hay Productos registrados.");
         }else{
-
-            //FIXME: arreglar esta busqueda porque no encuentra los productos que tienen espacio
             for (int i = 0; i < this.cantActual; i++) {
-                if(this.inventario[i].getNombreProducto().equalsIgnoreCase(nombreProducto)){
+                if(this.inventario[i].getNombreProducto().toLowerCase().contains(nombreProducto.toLowerCase())){
                     return inventario[i];
                 }
             }
             System.out.println("Producto no encontrado.");
         }
         return null;
-    }
-
-    /**
-     * Funcion que entegara la posicion de ese producto
-     *
-     * @param producto a buscar
-     * @return la posicion del producto encontrado
-     */
-    public int posicionProducto(Producto producto){
-        if (this.cantActual == 0){
-            System.out.println("No hay Productos registrados.");
-        }else{
-            for (int i = 0; i < this.cantActual; i++) {
-                if(this.inventario[i] == producto){
-                    return i;
-                }
-            }
-            System.out.println("Producto no encontrado.");
-        }
-        return -1;
     }
 
     /**
@@ -137,5 +110,62 @@ public class ContenedorProductos {
         }
     }
 
-    //TODO: agregar la funcion de eliminar un producto si su stock es cero
+    /**
+     * metodo que elimina productos que tengan stock cero
+     */
+    public void eliminarProductosStockCero() {
+
+        // Busca los productos con stock en cero o menor que cero
+        for (int i = 0; i < this.cantActual; i++) {
+            if (this.inventario[i].getStock() <= 0) {
+                // Elimina el producto
+                StdOut.println("Se elimino el producto " + this.inventario[i].getNombreProducto() + " del inventario " +
+                        "porque ya no queda en stock");
+                this.inventario[i] = null;
+            }
+        }
+        ordenarArreglo();
+    }
+
+    /**
+     * metodo que ordena el arreglo moviendo las casillas en null al final
+     */
+    public void ordenarArreglo() {
+
+        // Encuentra la posición del primer producto no null
+        int finNoNull = 0;
+        for (int i = 0; i < this.cantActual; i++) {
+            if (this.inventario[i] != null) {
+                finNoNull = i;
+                break;
+            }
+        }
+
+        // Mueve los productos null al final del arreglo
+        for (int i = finNoNull; i < this.cantActual; i++) {
+            if (this.inventario[i] == null) {
+                for (int j = i; j < this.cantActual - 1; j++) {
+                    this.inventario[j] = this.inventario[j + 1];
+                }
+                this.inventario[this.cantActual - 1] = null;
+            }
+        }
+        this.cantActual--;
+    }
+
+    /**
+     * metodo que eliminara un producto por su nombre
+     * @param producto a eliminar
+     */
+    public void eliminarProductoNombre(Producto producto){
+
+        for (int i = 0; i < this.cantActual; i++) {
+            if (this.inventario[i] == producto){
+                this.inventario[i] = null;
+                StdOut.println("Producto eliminado.");
+                break;
+            }
+        }
+        ordenarArreglo();
+    }
 }

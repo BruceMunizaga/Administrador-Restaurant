@@ -11,9 +11,11 @@ public class Main {
         menuPrincipal();
     }
 
+    /**
+     * El menu principal
+     */
     private static void menuPrincipal() {
         SistemaNegocioImpl SistemaNegocioImpl = new SistemaNegocioImpl();
-
         SistemaNegocioImpl.cargarInformacion();
 
 
@@ -30,13 +32,13 @@ public class Main {
                     [5] Guardar cambios y cerrar el programa.
                     """);
             StdOut.print("Inserte su opcion aqui: ");
-            opcion = StdIn.readString();
+            opcion = StdIn.readLine();
             StdOut.println("---------------------------------------------------------------------------------------------------");
 
             switch (opcion){
                 case "1" -> menuInventario(SistemaNegocioImpl);
-                case "2" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
-                case "3" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
+                case "2" -> menuTrabajador(SistemaNegocioImpl);
+                case "3" -> menuCliente(SistemaNegocioImpl);
                 case "4" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
                 case "5" -> StdOut.println("Hasta Pronto");
                 default -> StdOut.println("Opcion no valida, intente nuevamente");
@@ -45,6 +47,11 @@ public class Main {
         }
     }
 
+    /**
+     * El menu para interactuar con el inventario
+     *
+     * @param sistemaNegocioImpl a utilizar
+     */
     private static void menuInventario(SistemaNegocioImpl sistemaNegocioImpl){
         StdOut.println("[*] MENU INVENTARIO [*]");
         String opcion = null;
@@ -59,14 +66,83 @@ public class Main {
                     [5] Regresar al menu principal.
                     """);
             StdOut.print("Inserte su opcion aqui: ");
-            opcion = StdIn.readString();
+            opcion = StdIn.readLine();
             StdOut.println("---------------------------------------------------------------------------------------------------");
 
             switch (opcion){
-                case "1" -> sistemaNegocioImpl.opcionesInventario("1");
-                case "2" -> sistemaNegocioImpl.opcionesInventario("2");
-                case "3" -> sistemaNegocioImpl.opcionesInventario("3"); //FIXME: aun falta, esta incompleto
-                case "4" -> StdOut.println("Se esta trabajando en ello"); //TODO: hay que programarlo
+                case "1" -> sistemaNegocioImpl.verInventario();
+                case "2" -> sistemaNegocioImpl.agregarProducto();
+                case "3" -> sistemaNegocioImpl.actualizarStock(); //FIXME: falta arreglarlo ya que lee un dato de mas
+                case "4" -> sistemaNegocioImpl.eliminarUnProducto();
+                case "5" -> StdOut.println("Regresando al menu principal...");
+                default -> StdOut.println("Opcion no valida, intente nuevamente");
+            }
+        }
+    }
+
+    /**
+     * El menu para interactuar con los trabajadores
+     *
+     * @param sistemaNegocioImpl a utilizar
+     */
+    private static void menuTrabajador(SistemaNegocioImpl sistemaNegocioImpl){
+        StdOut.println("[*] ADMINISTRACION [*]");
+        String opcion = null;
+        while (!Objects.equals(opcion,"5")){
+            StdOut.println("""
+                    ---------------------------------------------------------------------------------------------------
+                    
+                    [1] Ver Trabajadores.
+                    [2] Renovar contrato.
+                    [3] Finalizar contrato.
+                    [4] Otorgar contrato indefinido.
+                    [5] Regresar al menu principal.
+                    """);
+            StdOut.print("Inserte su opcion aqui: ");
+            opcion = StdIn.readLine();
+            StdOut.println("---------------------------------------------------------------------------------------------------");
+
+            switch (opcion){
+                case "1" -> sistemaNegocioImpl.verTrabajadores();
+                case "2" -> sistemaNegocioImpl.renovarContrato();
+                case "3" -> sistemaNegocioImpl.finalizarContrato();
+                case "4" -> sistemaNegocioImpl.otorgarIndefinido();
+                case "5" -> StdOut.println("Regresando al menu principal...");
+                default -> StdOut.println("Opcion no valida, intente nuevamente");
+
+            }
+        }
+    }
+
+    /**
+     * El menu para interactuar con los clientes
+     *
+     * @param sistemaNegocioImpl a utilizar
+     */
+    private static void menuCliente(SistemaNegocioImpl sistemaNegocioImpl){
+        sistemaNegocioImpl.desplegarMesas();
+
+        StdOut.println("[*] MENU CLIENTES [*]");
+        String opcion = null;
+        while (!Objects.equals(opcion,"5")){
+            StdOut.println("""
+                    ---------------------------------------------------------------------------------------------------
+                    
+                    [1] Registrar nuevo cliente.
+                    [2] Opcion no disponible.
+                    [3] Opcion no disponible.
+                    [4] Opcion no disponible.
+                    [5] Regresar al menu principal.
+                    """);
+            StdOut.print("Inserte su opcion aqui: ");
+            opcion = StdIn.readLine();
+            StdOut.println("---------------------------------------------------------------------------------------------------");
+
+            switch (opcion){
+                case "1" -> sistemaNegocioImpl.registrarCliente(); //FIXME: arreglar el metodo ya que despliega algo demas
+                case "2" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
+                case "3" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
+                case "4" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
                 case "5" -> StdOut.println("Regresando al menu principal...");
                 default -> StdOut.println("Opcion no valida, intente nuevamente");
 

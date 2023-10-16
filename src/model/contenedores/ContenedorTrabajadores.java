@@ -1,10 +1,12 @@
 package src.model.contenedores;
 
+import edu.princeton.cs.stdlib.StdOut;
+import src.model.Producto;
 import src.model.herenciaPersona.Trabajador;
 
 public class ContenedorTrabajadores {
 
-    private Trabajador[] trabajdores;
+    private Trabajador[] trabajadores;
 
     private int cantActual;
     private final int cantMaxima;
@@ -16,7 +18,7 @@ public class ContenedorTrabajadores {
             throw new NumberFormatException("No se pueden crear contenedores con posiciones menores o iguales que cero");
         }else{
             this.cantMaxima = cantMaxima;
-            trabajdores = new Trabajador[cantMaxima];
+            trabajadores = new Trabajador[cantMaxima];
             this.cantActual = 0;
         }
     }
@@ -44,16 +46,14 @@ public class ContenedorTrabajadores {
             System.out.println("Cantidad maxima alcanzada, no se pudo agregar al nuevo Trabajador.");
         }else{
             if (this.cantActual == 0){
-                this.trabajdores[0] = nuevoTrabajador;
+                this.trabajadores[0] = nuevoTrabajador;
                 this.cantActual++;
-                System.out.println("Trabajador agregado.");
                 return true;
             }else{
                 for (int i = 0; i < this.cantMaxima; i++) {
-                    if (this.trabajdores[i] == null){
-                        this.trabajdores[i] = nuevoTrabajador;
+                    if (this.trabajadores[i] == null){
+                        this.trabajadores[i] = nuevoTrabajador;
                         this.cantActual++;
-                        System.out.println("Trabajador agregado.");
                         return true;
                     }
                 }
@@ -72,7 +72,7 @@ public class ContenedorTrabajadores {
         if (this.cantActual == 0){
             System.out.println("No hay trabajadores registrados.");
         }else{
-            for (Trabajador trabajador: this.trabajdores) {
+            for (Trabajador trabajador: this.trabajadores) {
                 if(trabajador.getNombre().equalsIgnoreCase(nombreTrabajador)){
                     return trabajador; //FIXME: Agregar el desplegar toda su informacion en la clase Trabajador
                 }
@@ -93,8 +93,8 @@ public class ContenedorTrabajadores {
         }else{
             Trabajador trabajador;
             for (int i = 0; i < this.cantActual; i++) {
-                if(this.trabajdores[i].getNombre().equalsIgnoreCase(nombreTrabajador)){
-                    this.trabajdores[i] = null;
+                if(this.trabajadores[i].getNombre().equalsIgnoreCase(nombreTrabajador)){
+                    this.trabajadores[i] = null;
                     System.out.println("Trabajador eliminado."); //FIXME: Agregar reordenamiento
                     return true;
                 }
@@ -102,5 +102,88 @@ public class ContenedorTrabajadores {
             System.out.println("Trabajador no encontrado.");
         }
         return false;
+    }
+
+    /**
+     * Metodo que desplegara a los trabajadores
+     *
+     */
+    public void desplegarTrabajadores(){
+
+        //Si no hay productos, se despliega esto
+        if (this.cantActual == 0){
+            System.out.println("No hay Productos registrados.");
+        }else{
+
+            //si hay productos agregados, se despliega esto
+            StdOut.println("[*][*][*][*][*][*][*] INVENTARIO [*][*][*][*][*][*][*]");
+            String fechaFinContratacion = "";
+            //se recorre el arreglo y se guardan sus datos en variables temporales
+            for (int i = 0; i < this.cantActual; i++) {
+                String nombreTrabajador = trabajadores[i].getNombre();
+                int edadTrabajador = trabajadores[i].getEdad();
+                String tipoDeContrato = trabajadores[i].getTipoDeContrato();
+                String fechaContratacion = trabajadores[i].getFechaInicioContratacion();
+
+                if (tipoDeContrato.equalsIgnoreCase("Fijo")){
+                    fechaFinContratacion = trabajadores[i].getFechaTerminoContratacion();
+                }
+
+                //Se despliega por pantalla toda la informacion de del producto
+                StdOut.println("...........................................");
+                StdOut.println("Nombre del Trabajador: "+nombreTrabajador);
+                StdOut.println("Edad: "+edadTrabajador);
+                StdOut.println("Tipo de contrato: "+tipoDeContrato);
+                StdOut.println("Fecha de contratacion: "+fechaContratacion);
+                if (tipoDeContrato.equalsIgnoreCase("Fijo")){
+                    StdOut.println("Fecha de fin del contrato: "+ fechaFinContratacion);
+                }
+
+            }
+            StdOut.println("[*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*]");
+        }
+    }
+
+    /**
+     *
+     * @param trabajador finalizar contrato
+     */
+    public void finalizarContratoTrabajador(Trabajador trabajador){
+
+        for (int i = 0; i < this.cantActual; i++) {
+            if (this.trabajadores[i] == trabajador){
+                this.trabajadores[i] = null;
+                StdOut.println("Se le ha finalizado el contrato al trabajador " + trabajador.getNombre() + " y se ha " +
+                        "eliminado de la lista de trabajadores");
+                break;
+            }
+        }
+        ordenarArregloTrabajadores();
+    }
+
+    /**
+     * metodo que ordena el arreglo moviendo las casillas en null al final
+     */
+    public void ordenarArregloTrabajadores() {
+
+        // Encuentra la posición del primer producto no null
+        int finNoNull = 0;
+        for (int i = 0; i < this.cantActual; i++) {
+            if (this.trabajadores[i] != null) {
+                finNoNull = i;
+                break;
+            }
+        }
+
+        // Mueve los productos null al final del arreglo
+        for (int i = finNoNull; i < this.cantActual; i++) {
+            if (this.trabajadores[i] == null) {
+                for (int j = i; j < this.cantActual - 1; j++) {
+                    this.trabajadores[j] = this.trabajadores[j + 1];
+                }
+                this.trabajadores[this.cantActual - 1] = null;
+            }
+        }
+        this.cantActual--;
     }
 }

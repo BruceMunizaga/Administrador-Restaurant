@@ -44,6 +44,30 @@ public class Trabajador extends Persona {
 
     /**
      *
+     * @return la fecha de termino de contratacion del trabajador
+     */
+    public String getFechaTerminoContratacion() {
+        return this.fechaTerminoContratacion;
+    }
+
+    /**
+     *
+     * @param fechaInicioContratacion del trabajador
+     */
+    public void setFechaInicioContratacion(String fechaInicioContratacion) {
+        this.fechaInicioContratacion = fechaInicioContratacion;
+    }
+
+    /**
+     *
+     * @param fechaTerminoContratacion del trabajador
+     */
+    public void setFechaTerminoContratacion(String fechaTerminoContratacion) {
+        this.fechaTerminoContratacion = fechaTerminoContratacion;
+    }
+
+    /**
+     *
      * @param tipoDeContrato del trabajador a modificar
      */
     public void setTipoDeContrato(String tipoDeContrato) {

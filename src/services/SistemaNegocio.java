@@ -3,29 +3,58 @@ package src.services;
 public interface SistemaNegocio {
 
     /**
-     * metodo que leera el archivo .txt
+     * procedimiento que cargara la informaicion al sistema
      */
     void cargarInformacion();
 
-
-
     /**
-     * metodo que desplegara el inventario en pantalla
+     * procedimiento que actualizar el stock en el inventario
      */
-    void opcionesInventario(String opcion);
+    void actualizarStock();
 
     /**
-     * metodo que desplegara a los trabajadores en pantalla
+     * procedimiento que desplegara el inventario por pantalla
+     */
+    void verInventario();
+
+    /**
+     * procedimiento que agregara un producto nuevo al inventario
+     */
+    void agregarProducto();
+
+    /**
+     * procedimiento que eliminara un producto  del inventario escogido por el usuario
+     */
+    void eliminarUnProducto();
+
+    /**
+     * procedimiento que desplegara a los trabajadores en pantalla
      */
     void verTrabajadores();
 
     /**
-     * metodo que desplegara a los clientes en pantalla
+     * procedimiento que renovara el contrato de un trabajador
      */
-    void verClientes();
+    void renovarContrato();
 
     /**
-     * metodo que desplegara el status de sus mesas en pantalla
+     * procedimiento para finalizar el contrato de un trabajador
      */
-    void verMesas();
+    void finalizarContrato();
+
+    /**
+     * procedimiento para otorgar el contrato indefinido a un trabajador
+     */
+    void otorgarIndefinido();
+
+    /**
+     * procedimiento que registrara a los clientes nuevos
+     */
+    void registrarCliente();
+
+    /**
+     * procedimiento que desplegara el status de sus mesas en pantalla
+     */
+    void desplegarMesas();
+
 }
