@@ -57,4 +57,19 @@ public interface SistemaNegocio {
      */
     void desplegarMesas();
 
+    /**
+     * Procedimiento que desplegara una mesa en especifico
+     */
+    void verMesa();
+
+    /**
+     * Procedimiento que desplegara a los clientes registrados
+     */
+    void verClientes();
+
+    /**
+     * procedimiento que aumentar la orden del cliente registrado
+     */
+    void aumentarOrden();
+
 }

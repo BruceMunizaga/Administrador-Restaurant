@@ -1,12 +1,14 @@
 package src.model.contenedores;
 
+import edu.princeton.cs.stdlib.StdOut;
+import src.model.Producto;
 import src.model.herenciaPersona.Cliente;
 
 public class ContenedorClientes {
 
     private Cliente[] clientes;
-
     private int cantActual;
+
     private final int cantMaxima;
 
     public ContenedorClientes(int cantMaxima) {
@@ -18,19 +20,8 @@ public class ContenedorClientes {
             this.cantMaxima = cantMaxima;
             clientes = new Cliente[cantMaxima];
             this.cantActual = 0;
+
         }
-    }
-
-    public int getCantActual() {
-        return this.cantActual;
-    }
-
-    public int getCantMaxima() {
-        return this.cantMaxima;
-    }
-
-    public void setCantActual(int cantActual) {
-        this.cantActual = cantActual;
     }
 
     /**
@@ -81,4 +72,34 @@ public class ContenedorClientes {
         }
         return null;
     }
+
+    /**
+     * Metodo que desplegara a los clientes
+     *
+     */
+    public void desplegarClientes(){
+
+        //Si no hay productos, se despliega esto
+        if (this.cantActual == 0){
+            System.out.println("No hay clientes registrados.");
+        }else{
+
+            //si hay productos clientes, se despliega esto
+            StdOut.println("[*][*][*][*][*][*][*] CLIENTES [*][*][*][*][*][*][*]");
+            String fechaFinContratacion = "";
+            //se recorre el arreglo y se guardan sus datos en variables temporales
+            for (int i = 0; i < this.cantActual; i++) {
+                String nombreCliente = clientes[i].getNombre();
+                int edadCliente = clientes[i].getEdad();
+
+                //Se despliega por pantalla toda la informacion de del producto
+                StdOut.println("...........................................");
+                StdOut.println("Nombre del Cliente: "+nombreCliente);
+                StdOut.println("Edad: "+edadCliente);
+                clientes[i].desplegarOrden();
+            }
+            StdOut.println("[*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*]");
+        }
+    }
+
 }

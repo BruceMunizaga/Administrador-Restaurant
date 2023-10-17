@@ -1,6 +1,8 @@
 package src.model;
 
+import edu.princeton.cs.stdlib.StdOut;
 import src.model.herenciaPersona.Cliente;
+import src.model.herenciaPersona.Trabajador;
 
 public class Mesa {
 
@@ -11,6 +13,7 @@ public class Mesa {
     private final int numeroMesa;
 
     private Cliente cliente;
+    private Trabajador trabajador;
 
     /**
      * The constructor
@@ -22,6 +25,7 @@ public class Mesa {
         this.libreOcupada = libreOcupada;
         this.numeroMesa = numeroMesa;
         this.cliente = null;
+        this.trabajador = null;
     }
 
     /**
@@ -74,5 +78,42 @@ public class Mesa {
      */
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public Trabajador getTrabajador() {
+        return this.trabajador;
+    }
+
+    public void setTrabajador(Trabajador trabajador) {
+        this.trabajador = trabajador;
+    }
+
+    public void desplegarMesa(){
+
+        if (this.cliente != null){
+            //solicto los datos de la mesa
+            int numeroMesa = getNumeroMesa();
+            String statusMesa = isLibreOcupadaString();
+            Cliente cliente = getCliente();
+            String nombreCliente = cliente.getNombre();
+            String nombreTrabajador = trabajador.getNombre();
+
+            StdOut.println("------------------------------------------------------------");
+            StdOut.println("Numero de la mesa: "+numeroMesa);
+            StdOut.println("Estado de la mesa: "+statusMesa);
+            StdOut.println("Cliente que ocupa la mesa: "+nombreCliente);
+            StdOut.println("Trabajador que atiende la mesa: "+nombreTrabajador);
+            StdOut.println("------------------------------------------------------------");
+        }else{
+            int numeroMesa = getNumeroMesa();
+            String statusMesa = isLibreOcupadaString();
+
+            StdOut.println("------------------------------------------------------------");
+            StdOut.println("Numero de la mesa: "+numeroMesa);
+            StdOut.println("Estado de la mesa: "+statusMesa);
+            StdOut.println("------------------------------------------------------------");
+        }
+
+
     }
 }

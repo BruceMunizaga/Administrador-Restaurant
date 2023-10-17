@@ -20,8 +20,8 @@ public class Main {
 
 
         StdOut.println("[*] BIENVENIDO AL SISTEMA DE ADMINISTRACION DEL RESTAURANTE[*]");
-        String opcion = null;
-        while (!Objects.equals(opcion,"5")){
+        String opcion = "0";
+        while (!opcion.equalsIgnoreCase("5")){
             StdOut.println("""
                     ---------------------------------------------------------------------------------------------------
                     
@@ -29,17 +29,17 @@ public class Main {
                     [2] Opciones de Trabajadores.
                     [3] Opciones de clientes.
                     [4] Opciones de Mesas.
-                    [5] Guardar cambios y cerrar el programa.
+                    [5] Cerrar el programa.
                     """);
             StdOut.print("Inserte su opcion aqui: ");
-            opcion = StdIn.readLine();
+            opcion = StdIn.readString();
             StdOut.println("---------------------------------------------------------------------------------------------------");
 
             switch (opcion){
                 case "1" -> menuInventario(SistemaNegocioImpl);
                 case "2" -> menuTrabajador(SistemaNegocioImpl);
                 case "3" -> menuCliente(SistemaNegocioImpl);
-                case "4" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
+                case "4" -> menuMesa(SistemaNegocioImpl);
                 case "5" -> StdOut.println("Hasta Pronto");
                 default -> StdOut.println("Opcion no valida, intente nuevamente");
 
@@ -54,8 +54,8 @@ public class Main {
      */
     private static void menuInventario(SistemaNegocioImpl sistemaNegocioImpl){
         StdOut.println("[*] MENU INVENTARIO [*]");
-        String opcion = null;
-        while (!Objects.equals(opcion,"5")){
+        String opcion = "0";
+        while (!opcion.equalsIgnoreCase("5")){
             StdOut.println("""
                     ---------------------------------------------------------------------------------------------------
                     
@@ -66,7 +66,7 @@ public class Main {
                     [5] Regresar al menu principal.
                     """);
             StdOut.print("Inserte su opcion aqui: ");
-            opcion = StdIn.readLine();
+            opcion = StdIn.readString();
             StdOut.println("---------------------------------------------------------------------------------------------------");
 
             switch (opcion){
@@ -87,8 +87,8 @@ public class Main {
      */
     private static void menuTrabajador(SistemaNegocioImpl sistemaNegocioImpl){
         StdOut.println("[*] ADMINISTRACION [*]");
-        String opcion = null;
-        while (!Objects.equals(opcion,"5")){
+        String opcion = "0";
+        while (!opcion.equalsIgnoreCase("5")){
             StdOut.println("""
                     ---------------------------------------------------------------------------------------------------
                     
@@ -99,7 +99,7 @@ public class Main {
                     [5] Regresar al menu principal.
                     """);
             StdOut.print("Inserte su opcion aqui: ");
-            opcion = StdIn.readLine();
+            opcion = StdIn.readString();
             StdOut.println("---------------------------------------------------------------------------------------------------");
 
             switch (opcion){
@@ -123,29 +123,57 @@ public class Main {
         sistemaNegocioImpl.desplegarMesas();
 
         StdOut.println("[*] MENU CLIENTES [*]");
-        String opcion = null;
-        while (!Objects.equals(opcion,"5")){
+        String opcion = "0";
+        while (!opcion.equalsIgnoreCase("5")){
             StdOut.println("""
                     ---------------------------------------------------------------------------------------------------
                     
                     [1] Registrar nuevo cliente.
-                    [2] Opcion no disponible.
-                    [3] Opcion no disponible.
-                    [4] Opcion no disponible.
+                    [2] Ver clientes registrados.
+                    [3] Aumentar la orden de un cliente.
+                    [4] Pagar Boleta.
                     [5] Regresar al menu principal.
                     """);
             StdOut.print("Inserte su opcion aqui: ");
-            opcion = StdIn.readLine();
+            opcion = StdIn.readString();
             StdOut.println("---------------------------------------------------------------------------------------------------");
 
             switch (opcion){
-                case "1" -> sistemaNegocioImpl.registrarCliente(); //FIXME: arreglar el metodo ya que despliega algo demas
-                case "2" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
-                case "3" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
+                case "1" -> sistemaNegocioImpl.registrarCliente(); //FIXME: arreglar el metodo ya que lee algo demas
+                case "2" -> sistemaNegocioImpl.verClientes();
+                case "3" -> sistemaNegocioImpl.aumentarOrden();
                 case "4" -> StdOut.println("Se esta trabajando en ello");//TODO: hay que programarlo
                 case "5" -> StdOut.println("Regresando al menu principal...");
                 default -> StdOut.println("Opcion no valida, intente nuevamente");
 
+            }
+        }
+    }
+
+    /**
+     * El menu para interactuar con las mesas
+     * @param sistemaNegocioImpl a utilizar
+     */
+    private static void menuMesa(SistemaNegocioImpl sistemaNegocioImpl){
+        StdOut.println("[*] MESAS [*]");
+        String opcion = "0";
+        while (!opcion.equalsIgnoreCase("5")){
+            StdOut.println("""
+                    ---------------------------------------------------------------------------------------------------
+                    
+                    [1] Ver mesas.
+                    [2] Desplegar contenido de una mesa.
+                    [3] Regresar al menu principal.
+                    """);
+            StdOut.print("Inserte su opcion aqui: ");
+            opcion = StdIn.readString();
+            StdOut.println("---------------------------------------------------------------------------------------------------");
+
+            switch (opcion){
+                case "1" -> sistemaNegocioImpl.desplegarMesas();
+                case "2" -> sistemaNegocioImpl.verMesa();
+                case "3" -> StdOut.println("Regresando al menu principal...");
+                default -> StdOut.println("Opcion no valida, intente nuevamente");
             }
         }
     }

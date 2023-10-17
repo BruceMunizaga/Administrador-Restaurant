@@ -4,6 +4,8 @@ import edu.princeton.cs.stdlib.StdOut;
 import src.model.Producto;
 import src.model.herenciaPersona.Trabajador;
 
+import java.util.NoSuchElementException;
+
 public class ContenedorTrabajadores {
 
     private Trabajador[] trabajadores;
@@ -21,18 +23,6 @@ public class ContenedorTrabajadores {
             trabajadores = new Trabajador[cantMaxima];
             this.cantActual = 0;
         }
-    }
-
-    public int getCantActual() {
-        return this.cantActual;
-    }
-
-    public int getCantMaxima() {
-        return this.cantMaxima;
-    }
-
-    public void setCantActual(int cantActual) {
-        this.cantActual = cantActual;
     }
 
     /**
@@ -68,40 +58,23 @@ public class ContenedorTrabajadores {
      * @param nombreTrabajador a buscar
      * @return true si encontro al trabajador
      */
-    public Trabajador obtenerTrabajador(String nombreTrabajador){
-        if (this.cantActual == 0){
-            System.out.println("No hay trabajadores registrados.");
-        }else{
-            for (Trabajador trabajador: this.trabajadores) {
-                if(trabajador.getNombre().equalsIgnoreCase(nombreTrabajador)){
-                    return trabajador; //FIXME: Agregar el desplegar toda su informacion en la clase Trabajador
+    public Trabajador obtenerTrabajador(String nombreTrabajador) {
+        try {
+            if (this.cantActual == 0) {
+                return null;
+            } else {
+                for (Trabajador trabajador: this.trabajadores) {
+                    if (trabajador.getNombre().equalsIgnoreCase(nombreTrabajador)) {
+                        return trabajador;
+                    }
                 }
+                return null;
             }
-            System.out.println("Trabajador no encontrado.");
-        }
-        return null;
-    }
+        } catch (NullPointerException e) {
 
-    /**
-     * Funcion que eliminara al trabajador en base a su nombre
-     * @param nombreTrabajador a buscar
-     * @return true si encontro al trabajador por eliminar
-     */
-    public boolean eliminarTrabajador(String nombreTrabajador){
-        if (this.cantActual == 0){
-            System.out.println("No hay trabajadores registrados.");
-        }else{
-            Trabajador trabajador;
-            for (int i = 0; i < this.cantActual; i++) {
-                if(this.trabajadores[i].getNombre().equalsIgnoreCase(nombreTrabajador)){
-                    this.trabajadores[i] = null;
-                    System.out.println("Trabajador eliminado."); //FIXME: Agregar reordenamiento
-                    return true;
-                }
-            }
-            System.out.println("Trabajador no encontrado.");
+            StdOut.println("Trabajador no encontrado");
+            return null;
         }
-        return false;
     }
 
     /**

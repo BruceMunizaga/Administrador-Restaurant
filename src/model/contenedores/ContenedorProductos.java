@@ -89,7 +89,6 @@ public class ContenedorProductos {
         }else{
 
             //si hay productos agregados, se despliega esto
-            StdOut.println("[*][*][*][*][*][*][*] INVENTARIO [*][*][*][*][*][*][*]");
 
             //se recorre el arreglo y se guardan sus datos en variables temporales
             for (int i = 0; i < this.cantActual; i++) {
@@ -103,10 +102,10 @@ public class ContenedorProductos {
                 StdOut.println("Nombre del producto: "+nombreProducto);
                 StdOut.println("Precio del producto: "+precioProducto);
                 StdOut.println("Categoria del producto: "+categoriaProducto);
-                StdOut.println("Stock del producto: "+stockProducto);
+                StdOut.println("Stock del unitario del producto: "+stockProducto);
 
             }
-            StdOut.println("[*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*]");
+            StdOut.println("...........................................");
         }
     }
 

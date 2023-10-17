@@ -1,6 +1,8 @@
 package src.model.contenedores;
 
+import edu.princeton.cs.stdlib.StdOut;
 import src.model.Mesa;
+import src.model.herenciaPersona.Cliente;
 
 public class ContenedorMesas {
 
@@ -24,14 +26,6 @@ public class ContenedorMesas {
             mesas = new Mesa[cantMaxima];
             this.cantActual = 0;
         }
-    }
-
-    public int getCantActual() {
-        return this.cantActual;
-    }
-
-    public int getCantMaxima() {
-        return this.cantMaxima;
     }
 
     /**
@@ -73,7 +67,7 @@ public class ContenedorMesas {
         }else{
             for (Mesa mesa: this.mesas) {
                 if(mesa.getNumeroMesa() == numeroMesa){
-                    return mesa; //FIXME: Agregar el desplegar toda su informacion en la clase Mesa
+                    return mesa;
                 }
             }
             System.out.println("Mesa no encontrada.");

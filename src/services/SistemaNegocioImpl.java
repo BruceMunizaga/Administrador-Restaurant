@@ -33,13 +33,31 @@ public class SistemaNegocioImpl implements SistemaNegocio{
         //si no hay informacion guardada, se generan automaticamente
 
         //inventario
-        producto = new Producto("Pan",200,"Comestible",30);
+        producto = new Producto("Pan",200,"Comestible",50);
         this.inventario.agregarProducto(producto);
-        producto = new Producto("Cebolla",300,"Comestible",30);
+        producto = new Producto("Carbonada",300,"Comestible",20);
         this.inventario.agregarProducto(producto);
         producto = new Producto("Jumex Manzana",1000,"Bebestible",30);
         this.inventario.agregarProducto(producto);
         producto = new Producto("Tacos al pastor",700,"Comestible",30);
+        this.inventario.agregarProducto(producto);
+        producto = new Producto("Chorrillana",3500,"Comestible",15);
+        this.inventario.agregarProducto(producto);
+        producto = new Producto("Palta reina",1500,"Comestible",20);
+        this.inventario.agregarProducto(producto);
+        producto = new Producto("CocaCola",700,"Bebestible",45);
+        this.inventario.agregarProducto(producto);
+        producto = new Producto("Te",700,"Bebestible",45);
+        this.inventario.agregarProducto(producto);
+        producto = new Producto("Cafe",1600,"Bebestible",15);
+        this.inventario.agregarProducto(producto);
+        producto = new Producto("Mole",3500,"Comestible",45);
+        this.inventario.agregarProducto(producto);
+        producto = new Producto("Pozole",2500,"Comestible",63);
+        this.inventario.agregarProducto(producto);
+        producto = new Producto("Quezadillas",700,"Comestible",30);
+        this.inventario.agregarProducto(producto);
+        producto = new Producto("Nachos",1000,"Comestible",45);
         this.inventario.agregarProducto(producto);
 
         //trabajadores
@@ -68,7 +86,7 @@ public class SistemaNegocioImpl implements SistemaNegocio{
 
         //Se pide el nombre del producto
         StdOut.print("Ingrese el nombre del producto que desea actualizar su stock: ");
-        String nombreProducto = StdIn.readLine();
+        String nombreProducto = StdIn.readString();
 
         //Se busca el producto en el arreglo
         this.producto = this.inventario.obtenerProducto(nombreProducto);
@@ -88,7 +106,7 @@ public class SistemaNegocioImpl implements SistemaNegocio{
                         [2] Disminuir Stock.
                     """);
                 StdOut.print("Inserte su opcion aqui: ");
-                opcionStock = StdIn.readLine();
+                opcionStock = StdIn.readString();
 
                 //si quiere agregar al stock
                 if (opcionStock.equalsIgnoreCase("1")) {
@@ -144,7 +162,9 @@ public class SistemaNegocioImpl implements SistemaNegocio{
         }else{
 
             //Si hay productos agregados, se despliegan
+            StdOut.println("[*][*][*][*][*][*][*] INVENTARIO [*][*][*][*][*][*][*]");
             inventario.desplegarProductos();
+            StdOut.println("[*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*][*]");
         }
     }
 
@@ -155,25 +175,40 @@ public class SistemaNegocioImpl implements SistemaNegocio{
         StdOut.print("Ingrese el nombre del producto a agregar: ");
         String nombreProducto = StdIn.readString();
 
-        int precioProducto;
+        double precioProducto = -1;
         do {
             StdOut.print("Ingrese el precio del producto: ");
-            precioProducto = StdIn.readInt();
-
-            if (precioProducto < 0){
-                StdOut.println("El precio no puede ser inferior a cero");
+            String precioStr = StdIn.readString();
+            if (!precioStr.matches("\\d+")) {
+                StdOut.println("El precio debe ser un número entero.");
+            }else{
+                precioProducto = Double.parseDouble(precioStr);
+                if (precioProducto < 0) {
+                    StdOut.println("La edad debe ser igual o mayor que 0.");
+                }
             }
-        }while (precioProducto < 0);
+        } while (precioProducto < 0);
 
-        int stockProducto;
+        //casting
+        int precioProductoInt = (int) precioProducto;
+
+        double stockProductoDouble = -1;
         do {
             StdOut.print("Ingrese el stock del producto: ");
-            stockProducto = StdIn.readInt();
-
-            if (stockProducto <= 0){
-                StdOut.println("El stock no puede ser  o igual a cero");
+            String stockStr = StdIn.readString();
+            if (!stockStr.matches("\\d+")) {
+                StdOut.println("El stock debe ser un número entero.");
+            }else{
+                stockProductoDouble = Double.parseDouble(stockStr);
+                if (stockProductoDouble < 0) {
+                    StdOut.println("El stock debe ser mayor que 0.");
+                }
             }
-        }while (stockProducto <= 0);
+
+        } while (stockProductoDouble < 0);
+
+        //casting
+        int stockProducto = (int) stockProductoDouble;
 
         String opcionCategoria;
         String categoria = null;
@@ -203,7 +238,7 @@ public class SistemaNegocioImpl implements SistemaNegocio{
         }while (!Objects.equals(opcionCategoria,"1") && !Objects.equals(opcionCategoria,"2") && !Objects.equals(opcionCategoria,"3"));
 
         //se guardan los datos
-        this.producto = new Producto(nombreProducto,precioProducto,categoria,stockProducto);
+        this.producto = new Producto(nombreProducto,precioProductoInt,categoria,stockProducto);
         if(this.inventario.agregarProducto(producto)){
             StdOut.println("Producto agregado");
         }
@@ -213,7 +248,7 @@ public class SistemaNegocioImpl implements SistemaNegocio{
     public void eliminarUnProducto(){
         //se solicita el nombre del producto a buscar
         StdOut.print("Ingrese el nombre del producto que desea eliminar del inventario: ");
-        String nombreProductoStock = StdIn.readLine();
+        String nombreProductoStock = StdIn.readString();
 
         // se busca el producto en funcion de su nombre
         this.producto = this.inventario.obtenerProducto(nombreProductoStock);
@@ -318,15 +353,44 @@ public class SistemaNegocioImpl implements SistemaNegocio{
         StdOut.print("Registrar el nombre del nuevo cliente: ");
         String nombreClienteNuevo = StdIn.readString();
 
-        StdOut.print("Registrar el edad del nuevo cliente: ");
-        int edadClienteNuevo = StdIn.readInt();
+        double edadClienteNuevo = 0;
+        do {
+            StdOut.print("Registrar el edad del nuevo cliente: ");
+            String edadStr = StdIn.readString();
+            if (!edadStr.matches("\\d+")) {
+                StdOut.println("La edad debe ser un número entero.");
+                continue;
+            }
+            edadClienteNuevo = Double.parseDouble(edadStr);
+            if (edadClienteNuevo < 18 || edadClienteNuevo > 100) {
+                StdOut.println("La edad debe ser igual o mayor que 18 y menor o igual que 100.");
+            }
+        } while (edadClienteNuevo < 18 || edadClienteNuevo > 100);
+
+        //casting
+        int edadClienteNuevoInt = (int) edadClienteNuevo;
 
         //se consulta la mesa que ocupara
         while(true){
-            StdOut.print("¿Que mesa ocupara?(incerte numero de mesa): ");
-            int mesaOcupar = StdIn.readInt();
 
+            double numeroMesa = 0;
+            do {
+                StdOut.print("¿Que mesa ocupara?(incerte numero de mesa): ");
+                String numerMesaStr = StdIn.readString();
+
+                if (!numerMesaStr.matches("\\d+")) {
+                    StdOut.println("El numero debe ser un número entero.");
+                    continue;
+                }
+                numeroMesa = Double.parseDouble(numerMesaStr);
+                if (numeroMesa < 1 || numeroMesa > 18) {
+                    StdOut.println("El numero debe ser igual o mayor que 1 y menor o igual que 19.");
+                }
+            } while (numeroMesa < 1 || numeroMesa > 18);
+
+            int mesaOcupar = (int) numeroMesa;
             this.mesa = this.mesas.obtenerMesa(mesaOcupar);
+
 
             //se valida si es que esa mesa esta ocupada o no
             if (!(this.mesa.isLibreOcupada())){
@@ -334,13 +398,195 @@ public class SistemaNegocioImpl implements SistemaNegocio{
             }else{
 
                 //si la mesa no esta ocupada, el cliente se situara en ella
-                this.cliente = new Cliente(nombreClienteNuevo,edadClienteNuevo);
+                this.cliente = new Cliente(nombreClienteNuevo,edadClienteNuevoInt);
                 this.clientes.agregarCliente(this.cliente);
                 this.mesa.setLibreOcupada(false);
                 this.mesa.setCliente(cliente);
+
+                //se consulta que trabajador atendera esa mesa
+                do {
+                    StdOut.print("Ingrese el nombre del trabajador que atendera esa mesa: ");
+                    String nombreTrabajador = StdIn.readString();
+
+                    //busca si el trabajador realmente existe
+                    this.trabajador = this.trabajadores.obtenerTrabajador(nombreTrabajador);
+
+                    //si no se encuentra, se vuelve a preguntar
+                }while(this.trabajador == null);
+
+                //si encontro la trabajador, se guarda en esa mesa
+                this.mesa.setTrabajador(this.trabajador);
+
+                this.mesa.desplegarMesa();
+
+                StdOut.println("""
+                        
+                        """);
+                String pregunta = "";
+                do {
+                    //se pregunta por elproducto
+                    StdOut.print("¿Que producto desea el cliente?: ");
+                    String productoUno = StdIn.readString();
+
+                    //se busca el producto consultado
+                    this.producto = inventario.obtenerProducto(productoUno);
+
+                    if (this.producto != null){
+
+                        int stockInt = 0;
+                        int stockAux = this.producto.getStock();
+                        boolean noInt;
+
+                        do {
+                            noInt = true;
+                            StdOut.print("¿En que cantidad quiere el producto?: ");
+                            String stockStr = StdIn.readString();
+
+                            try{
+                                stockInt = Integer.parseInt(stockStr);
+                            }catch (NumberFormatException e){
+                                StdOut.println("Solo se permiten numeros.");
+                                noInt = false;
+                            }
+                            if (noInt){
+                                if (stockInt < 1 || stockInt > stockAux) {
+                                    StdOut.println("El numero debe ser igual o mayor que 1 y menor o igual que "+stockAux+".");
+                                }
+                            }
+                        } while (stockInt < 1 || stockInt > stockAux || !noInt);
+
+                        this.cliente.realizarOrden(this.producto, stockInt);
+                        this.producto.setStock(-(stockInt)); //FIXME: no setea correctamente el stock
+                        this.inventario.eliminarProductosStockCero();
+
+                        //se consulta si quiere agregar otro producto a la orden
+                        do {
+                            StdOut.print("¿Desea agregar otro producto?: ");
+                            pregunta = StdIn.readString();
+
+                            if (!(pregunta.equalsIgnoreCase("Si")) && !(pregunta.equalsIgnoreCase("No"))){
+                                StdOut.println("Responde si o no.");
+                            }
+                        }while (!(pregunta.equalsIgnoreCase("Si")) && !(pregunta.equalsIgnoreCase("No")));
+                    }
+                }while (this.producto == null || pregunta.equalsIgnoreCase("si"));
+
                 break;
             }
         }
+    } //FIXME: arreglar el metodo porque no setea bien la boleta
+
+    @Override
+    public void aumentarOrden() {
+
+        //se consulta la mesa que se le agregara otra orden
+        while (true) {
+
+            double numeroMesa = 0;
+            do {
+                StdOut.print("Ingrese el numero de la mesa a la cual se le aumentara la orden: ");
+                String numerMesaStr = StdIn.readString();
+
+                if (!numerMesaStr.matches("\\d+")) {
+                    StdOut.println("El numero debe ser un número entero.");
+                    continue;
+                }
+                numeroMesa = Double.parseDouble(numerMesaStr);
+                if (numeroMesa < 1 || numeroMesa > 18) {
+                    StdOut.println("El numero debe ser igual o mayor que 1 y menor o igual que 19.");
+                }
+            } while (numeroMesa < 1 || numeroMesa > 18);
+
+            int numeroMesaInt = (int) numeroMesa;
+
+
+            this.mesa = this.mesas.obtenerMesa(numeroMesaInt);
+
+            //se valida si es que esa mesa esta ocupada o no
+            if ((this.mesa.isLibreOcupada())){
+                StdOut.println("Mesa libre, esoga otra");
+            }else{
+                this.cliente = this.mesa.getCliente();
+
+                String pregunta = "";
+                do {
+                    //se pregunta por elproducto
+                    StdOut.print("¿Que producto desea el cliente?: ");
+                    String productoUno = StdIn.readString();
+
+                    //se busca el producto consultado
+                    this.producto = inventario.obtenerProducto(productoUno);
+
+                    if (this.producto != null){
+
+                        int stockInt = 0;
+                        int stockAux = this.producto.getStock();
+                        boolean noInt;
+
+                        do {
+                            noInt = true;
+                            StdOut.print("¿En que cantidad quiere el producto?: ");
+                            String stockStr = StdIn.readString();
+
+                            try{
+                                stockInt = Integer.parseInt(stockStr);
+                            }catch (NumberFormatException e){
+                                StdOut.println("Solo se permiten numeros.");
+                                noInt = false;
+                            }
+                            if (noInt){
+                                if (stockInt < 1 || stockInt > stockAux) {
+                                    StdOut.println("El numero debe ser igual o mayor que 1 y menor o igual que "+stockAux+".");
+                                }
+                            }
+                        } while (stockInt < 1 || stockInt > stockAux || !noInt);
+
+                        this.cliente.realizarOrden(this.producto, stockInt);
+                        this.producto.setStock(-(stockInt)); //FIXME: no setea correctamente el stock
+                        this.inventario.eliminarProductosStockCero();
+
+                        //se consulta si quiere agregar otro producto a la orden
+                        do {
+                            StdOut.print("¿Desea agregar otro producto?: ");
+                            pregunta = StdIn.readString();
+
+                            if (!(pregunta.equalsIgnoreCase("Si")) && !(pregunta.equalsIgnoreCase("No"))){
+                                StdOut.println("Responde si o no.");
+                            }
+                        }while (!(pregunta.equalsIgnoreCase("Si")) && !(pregunta.equalsIgnoreCase("No")));
+                    }
+                }while (this.producto == null || pregunta.equalsIgnoreCase("si"));
+
+                break;
+            }
+        }
+    } //FIXME: arreglar el metodo porque no setea bien la boleta
+
+    @Override
+    public void verMesa(){
+        double numeroMesa = 0;
+        do {
+            StdOut.print("Incerte el numero de la mesa a ver: ");
+            String numerMesaStr = StdIn.readString();
+
+            if (!numerMesaStr.matches("\\d+")) {
+                StdOut.println("El numero debe ser un número entero.");
+                continue;
+            }
+            numeroMesa = Double.parseDouble(numerMesaStr);
+            if (numeroMesa < 1 || numeroMesa > 18) {
+                StdOut.println("El numero debe ser igual o mayor que 1 y menor o igual que 19.");
+            }
+        } while (numeroMesa < 1 || numeroMesa > 18);
+
+        int verMesa = (int) numeroMesa;
+        this.mesa = this.mesas.obtenerMesa(verMesa);
+        this.mesa.desplegarMesa();
+    }
+
+    @Override
+    public void verClientes(){
+        this.clientes.desplegarClientes();
     }
 
     @Override
