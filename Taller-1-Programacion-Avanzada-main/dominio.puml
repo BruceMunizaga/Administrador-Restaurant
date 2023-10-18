@@ -1,0 +1,65 @@
+@startuml
+left to right direction
+skin rose
+entity Mesa{
+    validador libre/ocupado
+    numero de mesa
+
+}
+entity Cliente{
+    nombre
+    edad
+
+}
+Mesa "1" - "0...*"Cliente: Tiene >
+entity Inventario{
+    lista de productos
+    eliminar un producto
+    agregar un producto
+
+}
+entity Producto{
+    nombre del producto
+    precio del producto
+    categoria
+    stock
+}
+Inventario "1" - "0...*" Producto: Posee >
+entity Administracion{
+    renovar contrato
+    finalizar contrato
+    otorgar contrato indefinido
+    lista de trabajadores
+}
+entity Trabajador{
+    nombre
+    edad
+    tipo de contrato
+    fecha de contratacion
+}
+Inventario "0...*" -- "0...*" Trabajador: Manipula <
+Administracion "1" - "0...*" Trabajador: Tiene >
+entity ContratoIndefinido{
+    fecha de inicio
+}
+note right of Trabajador : El trabajador no puede poseer dos contratos \n ni dos tipos de contratos.
+Trabajador "0...*" -- "0...1"ContratoIndefinido: Esta con >
+entity ContratoFijo{
+    fecha de inicio
+    fecha de termino
+}
+Trabajador "0...*" -- "0...1" ContratoFijo: Esta con >
+Trabajador "0...*" - "0...*" Mesa: Atiende >
+
+entity Boleta{
+    lista de productos consumidos
+    precio unitario
+    total acumulado
+    total del pedido
+    nombre del trabajador que atendio
+    numero de mesa
+}
+note left of Boleta : Si el cliente solicita la boleta \nse libera la mesa con la retirada del cliente.
+Cliente "0...*" -- "0...1" Boleta: Se facilita >
+Producto "0...*" -- "0...1" Cliente: Se facilita el producto al cliente \nal momento de que este realiza una orden >
+@enduml

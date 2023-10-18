@@ -1,0 +1,158 @@
+@startuml
+skin rose
+set separator none
+!pragma useIntermediatePackages false
+left to right direction
+package cl.ucn.disc.pa.restaurante{
+
+    package Services{
+        class SistemaNegocioImpl{
+
+        }
+
+        interface SistemaNegocio{
+        +cargarInformacion(): void
+        +actualizarStock(): void
+        +verInventario(): void
+        +agregarProducto(): void
+        +eliminarProducto(): void
+        +verTrabajadores(): void
+        +renovarContrato(): void
+        +finalizarContrato(): void
+        +otorgarIndefinido(): void
+        +registrarCliente(): void
+        +desplegarMesas(): void
+        +verMesa(): void
+        +verCliente(): void
+        +aumentarOrden(): void
+        }
+        SistemaNegocioImpl "1" ..|> "1" SistemaNegocio
+    }
+
+    package util{
+        class ContenedorTrabajadores{
+                        -trabajadores: Trabajador[]
+                        -cantMaxima: int
+                        -cantActual: int
+                        +ContenedorTrabajadores(cantMaxima: int)
+                        +agregarTrabajador(nuevoTrabajador: Trabajador): boolean
+                        +obtenerTrabajador(nombreTrabajador: String): Trabajador
+                        +desplegarTrabajadores(): void
+                        +finalizarContratoTrabajador(trabajador: Trabajador): void
+                        +ordenarArregloTrabajadores(): void
+                    }
+
+        class ContenedorClientes{
+                        -clientes: Cliente[]
+                        -cantMaxima: int
+                        -cantActual: int
+                        +ContenedorClientes(cantMaxima: int)
+                        +agregarCliente(nuevoCliente: Cliente): boolean
+                        +obtenerCliente(nombreCliente: String): Cliente
+                        +desplegarClientes(): void
+                    }
+
+        class ContenedorMesas{
+                        -mesas: Mesa[]
+                        -cantMaxima: int
+                        -cantActual: int
+                        +ContenedorMesas(cantMaxima: int)
+                        + agregarMesa(nuevaMesa: Mesa): boolean
+                        + obtenerMesa(numeroMesa: int): Mesa
+                    }
+
+        class ContenedorProductos{
+                        -inventario: Producto[]
+                        -cantMaxima: int
+                        -cantActual: int
+                        +ContenedorProductos(cantMaxima: int)
+                        +getCantActual(): int
+                        +desplegarProductos(): void
+                        +agregarProducto(nuevoProducto: Producto): boolean
+                        +obtenerProducto(nombreProducto: String): Producto
+                        +eliminarProductosStockCero(): void
+                        +ordenarArreglo(): void
+                        +eliminarProductoNombre(producto: Producto): void
+                    }
+    }
+
+    package Model{
+        abstract Persona <<abstract>>{
+                -nombre: String
+                -edad: int
+                +Persona(nombre: String, edad: int)
+                +getNombre(): String
+                +getEdad(): int
+            }
+
+            class Cliente{
+                -producto: Producto
+                +Cliente(nombre: String, edad: int)
+                +realizarOrden(producto1: Producto , stock: int)
+                +desplegarOrden(): void
+            }
+            Cliente --|> Persona
+            ContenedorProductos "1" *- "1" Cliente: -boleta: ContenedorProductos[]
+
+            class Trabajador{
+                -tipoDeContrato: String
+                -fechaInicioContratacion: String
+                -fechaTerminoContratacion: String
+                +Trabajador(nombre: String, edad: int, tipoDeContrato: String, fechaInicioContratacion: String, fechaTerminoContratacion: String)
+                +getTipoDeContrato(): String
+                +setTipoDeContrato(tipoDeContrato: String): void
+                +getFechaInicioContratacion(): String
+                +setFechaInicioContratacion(fechaInicioContratacion: String): void
+                +getFechaTerminoContratacion(): String
+                +setFechaTerminoContratacion(fechaTerminoContratacion: String): void
+            }
+            Trabajador --|> Persona
+
+
+            ContenedorTrabajadores "1" --o "0..*" Trabajador
+            SistemaNegocioImpl "1" -> "1" ContenedorTrabajadores
+
+
+            ContenedorClientes "1" --o "0..*" Cliente
+            SistemaNegocioImpl "1" -> "1" ContenedorClientes
+
+            class Mesa{
+                -libreOcupada: boolean
+                -numeroDeMesa: int
+                -cliente: Cliente
+                -trabajador: Trabajador
+                +Mesa(libreOcupada: boolean, numeroDeMesa: int)
+                +isLibreOcupada(): boolean
+                +isLibreOcupadaString(): String
+                +getNumeroDeMesa(): int
+                +setLibreOcupada(libreOcupada: boolean): void
+                +getCliente(): Cliente
+                +setCliente(): void
+                +setTrabajador(): void
+                +desplegarMesa(): void
+            }
+
+
+            ContenedorMesas "1" --o "0..*" Mesa
+            SistemaNegocioImpl "1" -> "1" ContenedorMesas
+
+            class Producto{
+                -nombreProducto: String
+                -precioProducto: int
+                -categoria: String
+                -stock: int
+                +Producto(nombreProducot: String, precioProducto: int, categoria: String, stock: int)
+                +getNombreProducto(): String
+                +getPrecioProducto(): int
+                +getCategoria(): String
+                +getStock(): int
+                +setStock(cantidad: int): boolean
+            }
+
+            ContenedorProductos "1" --o "0..*"Producto
+            SistemaNegocioImpl "1" -> "1" ContenedorProductos
+        }
+    }
+}
+
+@enduml
